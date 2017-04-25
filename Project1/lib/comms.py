@@ -22,6 +22,7 @@ class StealthConn(object):
             my_public_key, my_private_key = create_dh_key()
             # Send them our public key
             self.send(bytes(str(my_public_key), "ascii"))
+            print("sending the public key: %s" % my_public_key)
             # Receive their public key
             their_public_key = int(self.recv())
             # Obtain our shared secret
@@ -31,12 +32,10 @@ class StealthConn(object):
         # Default XOR algorithm can only take a key of length 32
 
         # Using AES.OFB cipher
-        # TODO 1: The sender cipher is not equal to echoed-back cipher, find the reason
         # TODO 2: Optimize the IV and key for more security
         # TODO 3: For the block cipher, it requires fix message length, we need to write a padding and unpadding function.
         IV = shared_hash[:16]
         key = shared_hash[:32]
-        print(len(IV))
         self.cipher = AES.new(key, AES.MODE_CFB
                               , IV)
 
