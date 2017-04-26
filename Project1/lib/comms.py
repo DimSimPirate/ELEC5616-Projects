@@ -1,13 +1,15 @@
 import struct
 
-from Crypto.Cipher import XOR, AES
+from Crypto.Cipher import AES
+from Crypto.Hash import HMAC
 
 from dh import create_dh_key, calculate_dh_secret
 
 class StealthConn(object):
-    def __init__(self, conn, client=False, server=False, verbose=False):
+    def __init__(self, conn, client=False, server=False, verbose=True):
         self.conn = conn
         self.cipher = None
+        self.h = None # HMAC
         self.client = client
         self.server = server
         self.verbose = verbose
@@ -36,11 +38,12 @@ class StealthConn(object):
         # TODO 3: For the block cipher, it requires fix message length, we need to write a padding and unpadding function.
         IV = shared_hash[:16]
         key = shared_hash[:32]
-        self.cipher = AES.new(key, AES.MODE_CFB
-                              , IV)
+        secrete = bytes(shared_hash, 'ascii')
+        self.cipher = AES.new(key, AES.MODE_CFB, IV)
+        self.h = HMAC.new(secrete)
 
     def send(self, data):
-        if self.cipher:
+        if self.cipher and self.h:
             encrypted_data = self.cipher.encrypt(data)
             if self.verbose:
                 print("Original data: {}".format(data))
@@ -61,7 +64,7 @@ class StealthConn(object):
         pkt_len = unpacked_contents[0]
 
         encrypted_data = self.conn.recv(pkt_len)
-        if self.cipher:
+        if self.cipher and self.hmac:
             data = self.cipher.decrypt(encrypted_data)
             if self.verbose:
                 print("Receiving packet of length {}".format(pkt_len))
