@@ -1,6 +1,6 @@
 import struct
 
-from Crypto.Cipher import XOR
+from Crypto.Cipher import XOR, AES
 
 from dh import create_dh_key, calculate_dh_secret
 
@@ -22,6 +22,7 @@ class StealthConn(object):
             my_public_key, my_private_key = create_dh_key()
             # Send them our public key
             self.send(bytes(str(my_public_key), "ascii"))
+            print("sending the public key: %s" % my_public_key)
             # Receive their public key
             their_public_key = int(self.recv())
             # Obtain our shared secret
@@ -29,7 +30,14 @@ class StealthConn(object):
             print("Shared hash: {}".format(shared_hash))
 
         # Default XOR algorithm can only take a key of length 32
-        self.cipher = XOR.new(shared_hash[:4])
+
+        # Using AES.OFB cipher
+        # TODO 2: Optimize the IV and key for more security
+        # TODO 3: For the block cipher, it requires fix message length, we need to write a padding and unpadding function.
+        IV = shared_hash[:16]
+        key = shared_hash[:32]
+        self.cipher = AES.new(key, AES.MODE_CFB
+                              , IV)
 
     def send(self, data):
         if self.cipher:
