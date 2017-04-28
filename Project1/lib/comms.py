@@ -6,13 +6,14 @@ from Crypto.Hash import HMAC
 from dh import create_dh_key, calculate_dh_secret
 
 class StealthConn(object):
-    def __init__(self, conn, client=False, server=False, verbose=False):
+    def __init__(self, conn, client=False, server=False, verbose=False, show_handshake=True):
         self.conn = conn
         self.cipher = None
         self.h = None
         self.client = client
         self.server = server
         self.verbose = verbose
+        self.show_handshake = show_handshake
         self.initiate_session()
 
     def initiate_session(self):
@@ -20,26 +21,73 @@ class StealthConn(object):
 
         ### TODO: Your code here!
         # This can be broken into code run just on the server or just on the client
-        if self.server or self.client:
-            my_public_key, my_private_key = create_dh_key()
-            # Send them our public key
-            self.send(bytes(str(my_public_key), "ascii"))
+
+
+        if self.client:
+            # Ask user to input the MODP, damn yeah you can choose anyone from RFC 3526
+            # Keep asking until you make it correct
+            while 1:
+                commu = input('Choose a MODP group (default 1536), '
+                              'valid inputs are "1536-bit", "2048-bit", "3072-bit", "4096-bit", "6144-bit", "8192-bit": ')
+                if commu == '' or commu == '1536-bit' or commu == '2048-bit' or commu == '3072-bit' or commu == '4096-bit' or commu == '6144-bit' or commu == '8192-bit':
+                    break
+                else:
+                    print('invalid input, try again:')
+
+            # Create the dh_key by your input
+            my_public_key, my_private_key = create_dh_key(commu)
+
+            # Send them our public key and your choice to server, so that server can know which MODP to use
+            # Split it by a space ' ', for better distinction on the server side
+            msg = str(my_public_key)+' '+commu
+            self.send(bytes(msg, "ascii"))
+
             # Receive their public key
             their_public_key = int(self.recv())
+
+            # If you want to have a clear demo of shake-hand, make show_handshake = True can help you
+            if self.show_handshake:
+                print("The first shake-hand: {}".format(msg))
+                print("Received public key: {}".format(their_public_key))
+
             # Obtain our shared secret
-            shared_hash = calculate_dh_secret(their_public_key, my_private_key)
+            shared_hash = calculate_dh_secret(their_public_key, my_private_key, commu)
             print("Shared hash: {}".format(shared_hash))
 
-        # Default XOR algorithm can only take a key of length 32
+        if self.server:
 
-        # Using AES.OFB cipher
+            # We should receive the msg first, which contain the MODP and client's public key
+            shake1 = self.recv()
+
+            # Demo the shake-hand procedure
+            if self.show_handshake:
+                print("The received first handshake: {}".format(shake1))
+
+            # Split the received msg by ' ', then we can use it for different purpose
+            shake1 = shake1.split(b' ')
+
+            # The client's public key is the first [0] element
+            # The MODP info is the second [1] element
+            their_public_key = int(shake1[0])
+            commu = shake1[1].decode('utf-8')
+
+            # Generate public and private key, and send it to client
+            my_public_key, my_private_key = create_dh_key(commu)
+            self.send(bytes(str(my_public_key), "ascii"))
+            # Obtain our shared secret
+            shared_hash = calculate_dh_secret(their_public_key, my_private_key, commu)
+            print("Shared hash: {}".format(shared_hash))
+
         # TODO 2: Optimize the IV and key for more security
         # TODO 3: For the block cipher, it requires fix message length, we need to write a padding and unpadding function.
+
+        # By using the shared_key, we can make a MAC and cipher.
+        # In here, we use the HMAC, and the CFB mode of AES as the cipher
         IV = shared_hash[:16]
         key = shared_hash[:32]
         secrete = bytes(shared_hash, 'ascii')
-        self.cipher = AES.new(key, AES.MODE_CFB, IV)
-        self.h = HMAC.new(secrete)
+        self.cipher = AES.new(key, AES.MODE_CFB, IV)    # Using AES.OFB cipher
+        self.h = HMAC.new(secrete)                      # using HMAC
 
     def send(self, data):
         if self.cipher and self.h:
