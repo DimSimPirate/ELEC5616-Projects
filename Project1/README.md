@@ -1,9 +1,8 @@
 # ELEC5616-Projects
 --------
 
-# Why there two different cipher-text when using `p2p echo`?
------
-## Problem are demonstrated in following:
+## Why there two different cipher-text when using `p2p echo`?
+### Problem are demonstrated in following:
 ```
 Listening on port 1337
 Waiting for connection...
@@ -44,3 +43,9 @@ We are using the **ASE_CFB** method to encrypt msg, so that we should provide th
 4. Alice received the cipher-text, decrypted it with IV1, and got the msg. Her initial vector switch to IV2 which is the same as Bob's.
 
 5. Repeating above stages
+
+## Pycharm show error with "unsolved reference", even if you can run the code
+
+1. Right click the `Project1` folder in pycharm
+
+2. Find the option `Mark directory as`, and choose the `Sources Root`
