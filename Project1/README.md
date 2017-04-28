@@ -1,5 +1,4 @@
 # ELEC5616-Projects
---------
 
 ## Why there two different cipher-text when using `p2p echo`?
 ### Problem are demonstrated in following:
@@ -30,7 +29,7 @@ msg --> Alice's cipher-text --> Bob --> Bob's decryption --> msg --> Bob's ciphe
 
 The common sense is that, the Alice's cipher-text should equal to Bob's cipher-text, because they are encrypting the same msg.
 
-## Explanation (More demon is in the `encryption-tesitng.py`):
+### Explanation (More demon is in the `encryption-tesitng.py`):
 We are using the **ASE_CFB** method to encrypt msg, so that we should provide the same IV(initial vector) to Alice and Bob. Lets suppose its *IV0*.
 
 
