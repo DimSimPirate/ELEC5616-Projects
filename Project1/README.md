@@ -48,3 +48,11 @@ We are using the **ASE_CFB** method to encrypt msg, so that we should provide th
 1. Right click the `Project1` folder in pycharm
 
 2. Find the option `Mark directory as`, and choose the `Sources Root`
+
+## How to convert python code to executable file:
+
+1. install the `pyinstaller` by using `pip install pyinstaller`
+
+2. Run the command `pyinstaller --onefile YOU_FILE.py`
+
+3. The generated binary file is located on the `/dist` of your current folder
