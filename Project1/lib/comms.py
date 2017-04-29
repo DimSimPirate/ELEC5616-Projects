@@ -2,14 +2,21 @@ import struct
 
 from Crypto.Cipher import AES
 from Crypto.Hash import HMAC
+from Crypto.Random import random
+from Crypto.PublicKey import DSA
 
 from dh import create_dh_key, calculate_dh_secret
+
+# Global variable storing used nonces
+nonces = []
 
 class StealthConn(object):
     def __init__(self, conn, client=False, server=False, verbose=False, show_handshake=True):
         self.conn = conn
         self.cipher = None
         self.h = None
+        #self.signature = None
+        self.nonce = None
         self.client = client
         self.server = server
         self.verbose = verbose
@@ -19,12 +26,8 @@ class StealthConn(object):
     def initiate_session(self):
         # Perform the initial connection handshake for agreeing on a shared secret
 
-        ### TODO: Your code here!
-        # This can be broken into code run just on the server or just on the client
-
-
         if self.client:
-            # Ask user to input the MODP, damn yeah you can choose anyone from RFC 3526
+            # Ask user to input the MODP, damn yeah you can choose any prime from RFC 3526
             # Keep asking until you make it correct
             while 1:
                 commu = input('Choose a MODP group (default 1536), '
@@ -88,13 +91,19 @@ class StealthConn(object):
         secrete = bytes(shared_hash, 'ascii')
 
         # Using AES.OFB cipher
+        # NOTE: Perhaps change the encryption mode depending on key selection to match secuity requirements
         self.cipher = AES.new(key, AES.MODE_CFB, IV)
 
         # using HMAC
         self.h = HMAC.new(secrete)
 
+        # Signature generation DSA
+        # sigKey = DSA.generate(1024)
+
     def send(self, data):
         if self.cipher and self.h:
+            # TODO: include a timestamp so that nonces dont have to be stored forever
+
             encrypted_data = self.cipher.encrypt(data)
             self.h.update(encrypted_data)
 
@@ -104,6 +113,13 @@ class StealthConn(object):
             # Attached the HMAC on the front
             encrypted_data = attached_hmac + encrypted_data
 
+            # Attached nonce
+            self.nonce = random.StrongRandom().getrandbits(100)
+
+            # Attached digital signature
+            #randK = random.StrongRandom().randint(1, self.sigKey.q-1)
+            #atached_sig = self.key.sign(encrypted_data, randK)
+            #encrypted_data = encrypted_data + attached_sig
 
             if self.verbose:
                 print("sending HMAC: {}".format(attached_hmac)) # Display the HMAC value on the sender-side
@@ -126,7 +142,6 @@ class StealthConn(object):
 
         encrypted_data = self.conn.recv(pkt_len)
         if self.cipher and self.h:
-
             # Grape the header HMAC and calculate HMAC
             attached_hmac = encrypted_data[:32]
             self.h.update(encrypted_data[32:])
@@ -144,6 +159,12 @@ class StealthConn(object):
                     print("HMAC verified, have a good day~!")
                 else:
                     print("Someone modified the message, take care!")
+                print("Nonce: {}".format(self.nonce))
+                if (self.nonce in nonces):
+                    print("Nonce already used, be wary of replay attack!")
+                else:
+                    ("Valid nonce, noice")
+                    nonces.append(self.nonce)
         else:
             data = encrypted_data
 
