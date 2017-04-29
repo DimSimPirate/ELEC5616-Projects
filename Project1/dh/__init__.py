@@ -27,16 +27,20 @@ def prime_select(commu):
     return raw_prime
 
 def create_dh_key(commu):
-    # Creates a Diffie-Hellman key
+    # Generator is always 2
     g = 2
+
+    # Get the corresponding prime
     raw_prime = prime_select(commu)
     prime = read_hex(raw_prime)
+
     # Returns (public, private)
     private = random.randint(2, prime-2)
     public = pow(g, private, prime)
     return (public, private)
 
 def calculate_dh_secret(their_public, my_private, commu):
+
     # Calculate the shared secret
     raw_prime = prime_select(commu)
     prime = read_hex(raw_prime)

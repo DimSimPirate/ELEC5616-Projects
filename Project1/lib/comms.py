@@ -86,15 +86,25 @@ class StealthConn(object):
         IV = shared_hash[:16]
         key = shared_hash[:32]
         secrete = bytes(shared_hash, 'ascii')
-        self.cipher = AES.new(key, AES.MODE_CFB, IV)    # Using AES.OFB cipher
-        self.h = HMAC.new(secrete)                      # using HMAC
+
+        # Using AES.OFB cipher
+        self.cipher = AES.new(key, AES.MODE_CFB, IV)
+
+        # using HMAC
+        self.h = HMAC.new(secrete)
 
     def send(self, data):
         if self.cipher and self.h:
             encrypted_data = self.cipher.encrypt(data)
             self.h.update(encrypted_data)
-            attached_hmac = bytes(self.h.hexdigest(),'ascii')       # HMAC the cipher-text
-            encrypted_data = attached_hmac + encrypted_data         # Attached the HMAC on the front
+
+            # HMAC the cipher-text
+            attached_hmac = bytes(self.h.hexdigest(),'ascii')
+
+            # Attached the HMAC on the front
+            encrypted_data = attached_hmac + encrypted_data
+
+
             if self.verbose:
                 print("sending HMAC: {}".format(attached_hmac)) # Display the HMAC value on the sender-side
                 print("Original data: {}".format(data))
@@ -116,10 +126,14 @@ class StealthConn(object):
 
         encrypted_data = self.conn.recv(pkt_len)
         if self.cipher and self.h:
-            attached_hmac = encrypted_data[:32]             # Grape the header HMAC
+
+            # Grape the header HMAC and calculate HMAC
+            attached_hmac = encrypted_data[:32]
             self.h.update(encrypted_data[32:])
-            calculated_hmac = bytes(self.h.hexdigest(),'ascii')    # Calculate the hmac value
-            data = self.cipher.decrypt(encrypted_data[32:]) # Grape the cipher-text and decipher
+            calculated_hmac = bytes(self.h.hexdigest(),'ascii')
+
+            # Grape the cipher-text and decipher
+            data = self.cipher.decrypt(encrypted_data[32:])
             if self.verbose:
                 print("Receiving packet of length {}".format(pkt_len))
                 print("Encrypted data: {}".format(repr(encrypted_data)))
