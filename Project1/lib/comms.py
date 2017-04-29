@@ -97,12 +97,13 @@ class StealthConn(object):
         # using HMAC
         self.h = HMAC.new(secrete)
 
-        # Signature generation DSA
+        # Signature generation
         # sigKey = DSA.generate(1024)
 
     def send(self, data):
         if self.cipher and self.h:
             # TODO: include a timestamp so that nonces dont have to be stored forever
+            # NOTE: timestamp must be encrypted, otherwise attacker can use previous message but make the time valid
 
             encrypted_data = self.cipher.encrypt(data)
             self.h.update(encrypted_data)
@@ -114,7 +115,7 @@ class StealthConn(object):
             encrypted_data = attached_hmac + encrypted_data
 
             # Attached nonce
-            self.nonce = random.StrongRandom().getrandbits(100)
+            self.nonce = random.StrongRandom().getrandbits(64)
 
             # Attached digital signature
             #randK = random.StrongRandom().randint(1, self.sigKey.q-1)
@@ -163,7 +164,7 @@ class StealthConn(object):
                 if (self.nonce in nonces):
                     print("Nonce already used, be wary of replay attack!")
                 else:
-                    ("Valid nonce, noice")
+                    print("Valid nonce, noice")
                     nonces.append(self.nonce)
         else:
             data = encrypted_data
