@@ -16,7 +16,6 @@ class StealthConn(object):
         self.cipher = None
         self.h = None
         #self.signature = None
-        self.nonce = None
         self.client = client
         self.server = server
         self.verbose = verbose
@@ -105,7 +104,10 @@ class StealthConn(object):
             # TODO: include a timestamp so that nonces dont have to be stored forever
             # NOTE: timestamp must be encrypted, otherwise attacker can use previous message but make the time valid
 
-            encrypted_data = self.cipher.encrypt(data)
+            # Attached nonce, lengthened to 10 digits
+            nonce = random.StrongRandom().getrandbits(24)
+
+            encrypted_data = self.cipher.encrypt(str(nonce).zfill(10).encode() + data)
             self.h.update(encrypted_data)
 
             # HMAC the cipher-text
@@ -113,9 +115,6 @@ class StealthConn(object):
 
             # Attached the HMAC on the front
             encrypted_data = attached_hmac + encrypted_data
-
-            # Attached nonce
-            self.nonce = random.StrongRandom().getrandbits(64)
 
             # Attached digital signature
             #randK = random.StrongRandom().randint(1, self.sigKey.q-1)
@@ -150,6 +149,8 @@ class StealthConn(object):
 
             # Grape the cipher-text and decipher
             data = self.cipher.decrypt(encrypted_data[32:])
+            message = data[10:]
+            nonce = data[:10]
             if self.verbose:
                 print("Receiving packet of length {}".format(pkt_len))
                 print("Encrypted data: {}".format(repr(encrypted_data)))
@@ -160,16 +161,16 @@ class StealthConn(object):
                     print("HMAC verified, have a good day~!")
                 else:
                     print("Someone modified the message, take care!")
-                print("Nonce: {}".format(self.nonce))
-                if (self.nonce in nonces):
+                print("Nonce: {}".format(nonce))
+                if (nonce in nonces):
                     print("Nonce already used, be wary of replay attack!")
                 else:
                     print("Valid nonce, noice")
-                    nonces.append(self.nonce)
+                    nonces.append(nonce)
         else:
-            data = encrypted_data
+            message = encrypted_data
 
-        return data
+        return message
 
     def close(self):
         self.conn.close()
