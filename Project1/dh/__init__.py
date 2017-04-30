@@ -29,19 +29,19 @@ def prime_select(commu):
 def create_dh_key(commu):
     # Generator is always 2
     g = 2
-	# Get the corresponding prime
+    # Get the corresponding prime
     raw_prime = prime_select(commu)
     prime = read_hex(raw_prime)
     
-	# Get none repeative private key
-	randomlist=[]
-	boolean= True
-	while boolean:
-		private = random.randint(2, prime-2)
-		if private not in randomlist:
-			randomlist.append(private)
-			boolean=False
-	# Returns (public, private)    
+    # Get none repeative private key
+    randomlist=[]
+    boolean= True
+    while boolean:
+        private = random.randint(2, prime-2)
+        if private not in randomlist:
+            randomlist.append(private)
+            boolean=False
+    # Returns (public, private)
     public = pow(g, private, prime)
     return (public, private)
 
