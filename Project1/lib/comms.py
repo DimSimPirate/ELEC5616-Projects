@@ -11,7 +11,7 @@ from dh import create_dh_key, calculate_dh_secret
 nonces = []
 
 class StealthConn(object):
-    def __init__(self, conn, client=False, server=False, verbose=False, show_handshake=True):
+    def __init__(self, conn, client=False, server=False, verbose=False, show_handshake=False):
         self.conn = conn
         self.cipher = None
         self.h = None
