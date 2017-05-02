@@ -1,6 +1,6 @@
 import os
 
-# Instead of storing files on disk,
+# Instead of storing files on disk
 # we'll save them in memory for simplicity
 filestore = {}
 # Valuable data to be sent to the botmaster
