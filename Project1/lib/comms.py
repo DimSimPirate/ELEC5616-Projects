@@ -80,8 +80,8 @@ class StealthConn(object):
             shared_hash = calculate_dh_secret(their_public_key, my_private_key, commu)
             print("Shared hash: {}".format(shared_hash))
 
-        # TODO 2: Optimize the IV and key for more security
-        # TODO 3: For the block cipher, it requires fix message length, we need to write a padding and unpadding function.
+        # TODO 3: Optimize the IV and key for more security
+        # TODO 4: For the block cipher, it requires fix message length, we need to write a padding and unpadding function.
 
         # By using the shared_key, we can make a MAC and cipher.
         # In here, we use the HMAC, and the CFB mode of AES as the cipher
@@ -101,7 +101,7 @@ class StealthConn(object):
 
     def send(self, data):
         if self.cipher and self.h:
-            # TODO: include a timestamp so that nonces dont have to be stored forever
+            # TODO 5: include a timestamp so that nonces dont have to be stored forever
             # NOTE: timestamp must be encrypted, otherwise attacker can use previous message but make the time valid
 
             # Attached nonce, lengthened to 10 digits

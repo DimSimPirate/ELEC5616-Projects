@@ -1,3 +1,5 @@
+# TODO 7: make bot can encrypt the valuable file and send it to master
+
 import socket
 import time
 import threading

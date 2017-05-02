@@ -3,13 +3,11 @@ from Crypto.Random import random
 from lib.helpers import read_hex
 from dh import RFC_3526
 
-# Project TODO: Is this the best choice of prime? Why? Why not? Feel free to replace!
 
 # 6144-bit safe prime for Diffie-Hellman key exchange
 # obtained from RFC 3526
 # Convert from the value supplied in the RFC to an integer
 
-# Project TODO: write the appropriate code to perform DH key exchange
 def prime_select(commu):
     raw_prime = ''
     if commu == '1536-bit' or commu == '':
