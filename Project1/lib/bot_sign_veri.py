@@ -4,13 +4,13 @@ from Crypto.PublicKey import RSA
 from Crypto import Random
 import os
 
-def gen_key():
-    #for testing
-    rng = Random.new().read
-    key = RSA.generate(2048,rng)
-    key_f=open("../pastebot.net/bots_folder/bot1/sign_public_key.spki","w")
-    key_f.write(key.publickey().exportkey("spki").encode("utf-8"))
-    key_f.close()
+# def gen_key():
+#     #for testing
+#     rng = Random.new().read
+#     key = RSA.generate(2048,rng)
+#     key_f=open("../pastebot.net/bots_folder/bot1/sign_public_key.spki","w")
+#     key_f.write(key.publickey().exportkey("spki").encode("utf-8"))
+#     key_f.close()
 
 
 def bot_signfile():
@@ -23,10 +23,10 @@ def bot_signfile():
 
 
 
-def bot_verification():
+def bot_verification(rec_file):
     #botnet veri master
-    publickey=RSA.importKey(open('../pastebot.net/bots_folder/bot1/sign_public_key.spki').read())
-    veri =PKCS1_v1_5.new(publickey)
+    publickey=RSA.importKey(open('../pastebot.net/bots_folder/bot1/signature_Public_key.pem').read())
+    veri =PKCS1_v1_5.new(rec_file, publickey)
     if veri:
         print("the file comes from master")
     else:

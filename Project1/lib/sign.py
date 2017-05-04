@@ -4,7 +4,6 @@
 
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
-from Crypto import Random
 from Crypto.PublicKey import RSA
 import os
 
@@ -22,10 +21,10 @@ def generate_key():
     f.write(key.publickey().exportKey('PEM').decode('utf-8'))
     f.close()
 
-def sign_file(file):
+def sign_file(file_path):
     # sign the file with signature
     # print(file.read().encode('utf-8'))
-    f = open(os.path.join("../pastebot.net/master_folder/", file), "rb").read()
+    f = open(os.path.join("../pastebot.net/master_folder/", file_path), "rb").read()
     h = SHA256.new(f)
     print(h.hexdigest())
     key = RSA.importKey(open('../pastebot.net/master_folder/signature_Private_key.pem').read())
