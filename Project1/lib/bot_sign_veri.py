@@ -23,14 +23,16 @@ import os
 
 def bot_verification(fn):
     # botnet veri master
-    if not os.path.exists(os.path.join("pastebot.net", fn)):
-        print("The given file doesn't exist on pastebot.net")
-        os.exit(1)
-    f = open(os.path.join("pastebot.net", fn), "rb").read()
-    hash = SHA256.new(f)
-    key = RSA.importKey(open('../pastebot.net/public_keys/signature_Public_key.pem').read())
-    veri = PKCS1_v1_5.new(key)
-    return veri.verify(hash, signature)
+    if not os.path.exists(os.path.join("../pastebot.net", fn)):
+        print("The given file doesn't exist")
+        os._exit(1)
+    f = open(os.path.join("../pastebot.net", fn), "r")
+    lines = f.readlines()
+    f.close()
+    h1 = SHA256.new(''.join(lines[:-2]).encode('utf-8'))
+    publicKey = RSA.importKey(open('../pastebot.net/public_keys/signature_Public_key.pem').read())
+    verifier = PKCS1_v1_5.new(publicKey)
+    return verifier.verify(h1, bytes.fromhex(lines[-1]))
 
 
 

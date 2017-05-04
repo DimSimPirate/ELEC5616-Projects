@@ -40,6 +40,13 @@ def sign_file(file_path):
     f.write("\nSignature: \n" + signature.hex())
     f.close()
 
+    ## TODO: This is a dummy upload for testing signature, need to submit it through the net
+    f = open(os.path.join("../master_folder/", file_path), "r")
+    f_w = open(os.path.join("../pastebot.net/", file_path), "w")
+    f_w.write(f.read())
+    f.close()
+    f_w.close()
+
 # Demonstrate the sign and verify process
 # master side generation
 if __name__ == "__main__":
