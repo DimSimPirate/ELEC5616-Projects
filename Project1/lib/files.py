@@ -34,8 +34,7 @@ def verify_file(f):
     # Verify the file was sent by the bot master
     # TODO 6: For Part 2, you'll use public key crypto here
     # Naive verification by ensuring the first line has the "passkey"
-    verification = bot_verification(f)
-    return verification
+    return bot_verification(f)
 
 def process_file(fn, f):
     if verify_file(f):

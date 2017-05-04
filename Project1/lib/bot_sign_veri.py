@@ -1,6 +1,7 @@
 from Crypto.Hash import SHA256
 from Crypto.Signature import PKCS1_v1_5
 from Crypto.PublicKey import RSA
+import re
 import os
 
 # def gen_key():
@@ -23,16 +24,14 @@ import os
 
 def bot_verification(fn):
     # botnet veri master
-    if not os.path.exists(os.path.join("../pastebot.net", fn)):
-        print("The given file doesn't exist")
-        os._exit(1)
-    f = open(os.path.join("../pastebot.net", fn), "r")
-    lines = f.readlines()
-    f.close()
+    lines = fn.decode('utf-8').split('\n')
     h1 = SHA256.new(''.join(lines[:-2]).encode('utf-8'))
-    publicKey = RSA.importKey(open('../pastebot.net/public_keys/signature_Public_key.pem').read())
+    publicKey = RSA.importKey(open('pastebot.net/public_keys/signature_Public_key.pem').read())
     verifier = PKCS1_v1_5.new(publicKey)
-    return verifier.verify(h1, bytes.fromhex(lines[-1]))
-
+    try:
+        sign = bytes.fromhex(lines[-1])
+        return verifier.verify(h1, sign)
+    except ValueError:
+        return False
 
 

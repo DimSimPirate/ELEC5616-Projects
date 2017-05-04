@@ -48,3 +48,28 @@ We are using the **ASE_CFB** method to encrypt msg, so that we should provide th
 1. Right click the `Project1` folder in pycharm
 
 2. Find the option `Mark directory as`, and choose the `Sources Root`
+
+## Part 2 Implementation:
+
+### Signature demo
+```
+(elec5616) ➜  Project1 git:(impl-bot-verification) ✗ python master_view.py
+Waiting for your command, master :3 generate-key
+key-pair generated successfully! and uploaded to pastebot.net
+Waiting for your command, master :3 sign Secrete1
+signed successfully
+Waiting for your command, master :3 view Secrete1.signed
+there is no secrete... :3
+Signature:
+50bd0638c9316d4ddb3b006ea5a1bb4e579667376e243a303c0ac6bff69e01e02d324f410d7908cfaca02f290753d1e47e72fe6a435da8878cc124b845ea76d8e1072c282589c9846bf2b1160cab838eb3b2bf93c38808a2cf440b6118adc918fd1b71c4a52661034642ca2d929da1b8b23af4329eb64225088e1a02b5648c09c22efc10fa0821368ebc80a120804a6a7566c558d82e0e75e35200f6d94960d12c58da6f96b9cdfef3efa481cf6c9b65af078e98dabdf74d7ee6e19f3c15ca4a5121e31ebb2af28f1bc4eceea4698041062e33365bfacaa05f601f7239a43c80d7a265b898f252082a266e21045dca76789f625646d547f9a154031eccb9f5fd
+
+=== The bot side ===
+(elec5616) ➜  Project1 git:(impl-bot-verification) ✗ python bot.py
+Listening on port 1337
+Waiting for connection...
+Enter command: download Secrete1.signed
+Stored the received file as Secrete1.signed
+Enter command: download Secrete1
+The file has not been signed by the botnet master
+Enter command:
+```
