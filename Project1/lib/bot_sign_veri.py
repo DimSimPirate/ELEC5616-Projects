@@ -6,7 +6,7 @@ import os
 
 def bot_verification(fn):
     # botnet veri master
-    lines = fn.decode('utf-8').split('\n')
+    lines = fn.decode('utf-8').splitlines()
     h1 = SHA256.new(''.join(lines[:-2]).encode('utf-8'))
     if not os.path.exists('pastebot.net/public_keys/signature_Public_key.pem'):
         print("There is not public key installed in public_keys folder, run master_bot and type command"
