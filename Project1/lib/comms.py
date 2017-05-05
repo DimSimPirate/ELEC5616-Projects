@@ -104,12 +104,13 @@ class StealthConn(object):
             # TODO 5: include a timestamp so that nonces dont have to be stored forever
             # NOTE: timestamp must be encrypted, otherwise attacker can use previous message but make the time valid
 
-            # Attached nonce, lengthened to 10 digits
+            # sometime the program trying to send the str, switch it into bytes
             if type(data) is str:
                 data = bytes(data, 'ascii')
 
             nonce = random.StrongRandom().getrandbits(24)
 
+            # Attached nonce, lengthened to 10 digits
             encrypted_data = self.cipher.encrypt(str(nonce).zfill(10).encode() + data)
             self.h.update(encrypted_data)
 

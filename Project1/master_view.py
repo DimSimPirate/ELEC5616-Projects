@@ -8,19 +8,29 @@ from Crypto import Random
 
 def decrypt_valuables(f):
     # TODO: For Part 2, you'll need to decrypt the contents of this file
-    # The existing scheme uploads in plaintext
-    # As such, we just convert it back to ASCII and print it out
+
+    # Extracting the hash and content
     h_rec = f[-64:]
     data_ency = f[:-64]
+
+    # Generate the hash by ourselves and make sure its valid, otherwise we will drop it
     h_veri = SHA256.new(data_ency)
     dsize = SHA256.digest_size
     sentinel = Random.new().read(15 + dsize)
+
+    # make sure the hash is valid
     if h_veri.hexdigest() == h_rec.decode('utf-8'):
+
+        # make sure the path is valid
         if not os.path.exists("master_folder/encryption_Private_key.pem"):
             print("there is not Private key, try to run 'generate-encykey' to get one")
             os._exit(1)
+
+        # extract the private key from master_folder
         key = RSA.importKey(open("master_folder/encryption_Private_key.pem").read())
         cipher = PKCS1_v1_5.new(key)
+
+        # Decrypt the data
         decrypted_data = cipher.decrypt(data_ency, sentinel)
         print(decrypted_data.decode('utf-8'))
 
@@ -42,12 +52,19 @@ def generate_encykey():
     f.write(key.publickey().exportKey('PEM').decode('utf-8'))
     f.close()
 
-    # Upload the public key
+    # Upload the public key to pastebot.net/public_keys
     f = open("pastebot.net/public_keys/encryption_Public_key.pem",'w')
     f.write(key.publickey().exportKey('PEM').decode('utf-8'))
     f.close()
 
 
+# This is for master_view controller, master can enter command to do some features:
+# - generate-signkey (to generate the signature key)
+# - generate-encykey (to generate the encryption key)
+# - sign FILENAME (to sign a file in the pastebot.net)
+# - view FILENAME (to decrypt and print it out of a file in the pastebot,net)
+# - cat FILENAME (observe the content of a plaintext file, caution: cannot use for encrypted file)
+# - quit / exit (exit the program)
 if __name__ == "__main__":
     while 1:
         raw_cd = input("Waiting for your command, master :3 ")

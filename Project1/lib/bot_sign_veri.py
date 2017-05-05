@@ -7,13 +7,27 @@ import os
 def bot_verification(fn):
     # botnet veri master
     lines = fn.decode('utf-8').splitlines()
+
+    # The true content is stored in the fisrt until -2 lines
+    # Hash it for verification
     h1 = SHA256.new(''.join(lines[:-2]).encode('utf-8'))
+
+    # Make sure the path is valid
     if not os.path.exists('pastebot.net/public_keys/signature_Public_key.pem'):
         print("There is not public key installed in public_keys folder, run master_bot and type command"
               " 'generate-signkey' to upload a new one")
         os._exit(1)
+
+    # Extract public keys from pastebot.net/public_keys
     publicKey = RSA.importKey(open('pastebot.net/public_keys/signature_Public_key.pem').read())
+
+    # Verifying the data
     verifier = PKCS1_v1_5.new(publicKey)
+
+    # The 'bytes.fromhex()' sometimes failure,
+    # that is because when you are trying to treat a plaintext as a signature,
+    # the range of plaintext is out of range of Hex.
+    # Using try except to make sure the program is solid
     try:
         sign = bytes.fromhex(lines[-1])
         return verifier.verify(h1, sign)
