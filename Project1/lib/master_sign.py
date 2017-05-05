@@ -39,8 +39,10 @@ def sign_file(file_path):
     file_data = f.read().decode('utf-8')
     f.close()
 
-    lines = file_data.split('\n')
+    lines = file_data.splitlines()
     h = SHA256.new(''.join(lines).encode('utf-8'))
+    print (h.hexdigest())
+    print (''.join(lines).encode('utf-8'))
     if not os.path.exists('master_folder/signature_Private_key.pem'):
         print("you do not have a key-pair, enter 'generate-key' command to get one")
         os._exit(1)
