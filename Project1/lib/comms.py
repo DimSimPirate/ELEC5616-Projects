@@ -105,6 +105,9 @@ class StealthConn(object):
             # NOTE: timestamp must be encrypted, otherwise attacker can use previous message but make the time valid
 
             # Attached nonce, lengthened to 10 digits
+            if type(data) is str:
+                data = bytes(data, 'ascii')
+
             nonce = random.StrongRandom().getrandbits(24)
 
             encrypted_data = self.cipher.encrypt(str(nonce).zfill(10).encode() + data)
