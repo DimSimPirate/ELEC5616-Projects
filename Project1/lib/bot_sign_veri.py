@@ -15,6 +15,8 @@ def bot_verification(fn):
         os._exit(1)
     publicKey = RSA.importKey(open('pastebot.net/public_keys/signature_Public_key.pem').read())
     verifier = PKCS1_v1_5.new(publicKey)
+    print (h1.hexdigest())
+    print (''.join(lines[:-2]).encode('utf-8'))
     try:
         sign = bytes.fromhex(lines[-1])
         return verifier.verify(h1, sign)
