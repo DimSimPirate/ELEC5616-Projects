@@ -1,6 +1,6 @@
 import os
-
-# Instead of storing files on disk,
+from lib.bot_sign_veri import bot_verification
+# Instead of storing files on disk
 # we'll save them in memory for simplicity
 filestore = {}
 # Valuable data to be sent to the botmaster
@@ -34,11 +34,7 @@ def verify_file(f):
     # Verify the file was sent by the bot master
     # TODO 6: For Part 2, you'll use public key crypto here
     # Naive verification by ensuring the first line has the "passkey"
-    lines = f.split(bytes("\n", "ascii"), 1)
-    first_line = lines[0]
-    if first_line == bytes("Caesar", "ascii"):
-        return True
-    return False
+    return bot_verification(f)
 
 def process_file(fn, f):
     if verify_file(f):
