@@ -1,5 +1,8 @@
 import os
 from lib.bot_sign_veri import bot_verification
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_v1_5
 # Instead of storing files on disk
 # we'll save them in memory for simplicity
 filestore = {}
@@ -13,7 +16,15 @@ def save_valuable(data):
 
 def encrypt_for_master(data):
     # Encrypt the file so it can only be read by the bot master
-    return data
+    if not os.path.exists('pastebot.net/public_keys/encryption_Public_key.pem'):
+        print("there is not encryption key, run master_view and type command 'generate-encykey' to get one")
+        os._exit(1)
+    key = RSA.importKey(open('pastebot.net/public_keys/encryption_Public_key.pem').read())
+    cipher = PKCS1_v1_5.new(key)
+    ciphertext = cipher.encrypt(data)
+    h = SHA256.new(ciphertext)
+
+    return ciphertext+bytes(h.hexdigest(), "ascii")
 
 def upload_valuables_to_pastebot(fn):
     # Encrypt the valuables so only the bot master can read them
