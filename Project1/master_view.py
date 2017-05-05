@@ -25,7 +25,7 @@ def decrypt_valuables(f):
         print(decrypted_data.decode('utf-8'))
 
     else:
-        print("Ah!!!!! The file be modified by SOMEONE!!!!")
+        print("Ah!!!!! The file be modified by SOMEONE!!!! Or, It's not encrypted so sad :(")
 
 
 def generate_encykey():
@@ -83,6 +83,17 @@ if __name__ == "__main__":
                     os._exit(1)
                 f = open(os.path.join("pastebot.net", fn), "rb").read()
                 decrypt_valuables(f)
+            else:
+                print("The view command requires a filename afterwards")
+
+        elif cmd[0].lower() == 'cat':
+            if len(cmd) == 2:
+                fn = cmd[1]
+                if not os.path.exists(os.path.join("pastebot.net", fn)):
+                    print("The given file doesn't exist on pastebot.net")
+                    os._exit(1)
+                f = open(os.path.join("pastebot.net", fn), "rb").read()
+                print(str(f, 'ascii'))
             else:
                 print("The view command requires a filename afterwards")
 
