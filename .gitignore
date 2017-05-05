@@ -1,5 +1,6 @@
 # Pycharm
 *.idea
 *.pem
-/Project1/pastebot.net/*.pem
-/Project1/master_folder/public_keys/*.pem
+/Project1/pastebot.net/*
+!/Project1/pastebot.net/public_keys/README.md
+/Project1/master_folder/*.pem

@@ -93,7 +93,10 @@ if __name__ == "__main__":
                     print("The given file doesn't exist on pastebot.net")
                     os._exit(1)
                 f = open(os.path.join("pastebot.net", fn), "rb").read()
-                print(str(f, 'ascii'))
+                try:
+                    print(str(f, 'ascii'))
+                except ValueError:
+                    print("nah, I guess there are some hex our of 0-127 range")
             else:
                 print("The view command requires a filename afterwards")
 
