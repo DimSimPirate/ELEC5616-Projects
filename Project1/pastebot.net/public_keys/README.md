@@ -1,0 +1,1 @@
+# This folder for storing public-key, then the bot can use it

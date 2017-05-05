@@ -60,7 +60,7 @@ if __name__ == "__main__":
             generate_signkey()
             print("Signature key-pair generated successfully! and uploaded to pastebot.net")
 
-        if cmd[0].lower() == 'generate-encykey':
+        elif cmd[0].lower() == 'generate-encykey':
             generate_encykey()
             print("Encyption key-pair generated successfully! and uploaded to pastebot.net")
 
