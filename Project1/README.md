@@ -73,3 +73,28 @@ Enter command: download Secrete1
 The file has not been signed by the botnet master
 Enter command:
 ```
+
+### Encryption demo
+```
+=== The bot side ===
+(elec5616) ➜  Project1 git:(impl-master-decryption) ✗ python bot.py
+Listening on port 1337
+Waiting for connection...
+Enter command: mine
+Mining for Bitcoins...
+-
+Mined and found Bitcoin address: 3nyD8iI2xHzPZDqjtefRKqSJKo6dgcf9xC4
+Enter command: harvest
+Found user pass: ('Ben', 'xMauV4yP')
+Enter command: list
+Files stored by this bot:
+Valuables stored by this bot: ['Bitcoin: 3nyD8iI2xHzPZDqjtefRKqSJKo6dgcf9xC4', 'Username/Password: Ben xMauV4yP']
+Enter command: upload testing_upload
+Saved valuables to pastebot.net/testing_upload for the botnet master
+
+== The master side ===
+(elec5616) ➜  Project1 git:(impl-master-decryption) ✗ python master_view.py
+Waiting for your command, master :3 view testing_upload
+Bitcoin: 3nyD8iI2xHzPZDqjtefRKqSJKo6dgcf9xC4
+Username/Password: Ben xMauV4yP
+```
