@@ -24,7 +24,7 @@ def bot_verification(fn):
     # Verifying the data
     verifier = PKCS1_v1_5.new(publicKey)
 
-    # The 'bytes.fromhex()' sometimes failure,
+    # The 'bytes.fromhex()' sometimes fails,
     # that is because when you are trying to treat a plaintext as a signature,
     # the range of plaintext is out of range of Hex.
     # Using try except to make sure the program is solid
@@ -33,5 +33,3 @@ def bot_verification(fn):
         return verifier.verify(h1, sign)
     except ValueError:
         return False
-
-

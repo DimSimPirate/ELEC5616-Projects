@@ -85,10 +85,12 @@ if __name__ == "__main__":
             if len(cmd) == 2:
                 fn = cmd[1]
                 f_signed = sign_file(fn)
-                f = open(os.path.join("pastebot.net", fn+'.signed'), 'w')
-                f.write(f_signed)
-                f.close()
-                print("signed successfully")
+                #Proceed if no errors signing file
+                if f_signed != 0:
+                    f = open(os.path.join("pastebot.net", fn+'.signed'), 'w')
+                    f.write(f_signed)
+                    f.close()
+                    print("signed successfully")
             else:
                 print("The sign command requires a filename afterwards")
 

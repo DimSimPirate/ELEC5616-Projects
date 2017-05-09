@@ -54,7 +54,7 @@ We are using the **ASE_CFB** method to encrypt msg, so that we should provide th
 ### Signature demo
 ```
 (elec5616) ➜  Project1 git:(impl-bot-verification) ✗ python master_view.py
-Waiting for your command, master :3 generate-key
+Waiting for your command, master :3 generate-signkey
 key-pair generated successfully! and uploaded to pastebot.net
 Waiting for your command, master :3 sign Secrete1
 signed successfully

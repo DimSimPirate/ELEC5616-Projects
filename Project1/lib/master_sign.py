@@ -30,10 +30,11 @@ def generate_signkey():
 
 def sign_file(file_path):
 
+    #TODO: handle file not found exception so the program doesnt have to exit
     # Make sure the path is exist
     if not os.path.exists(os.path.join("pastebot.net", file_path)):
-        print("There is not such file or director, try again:")
-        os._exit(1)
+        print("There is not such file or directory, try again:")
+        return 0
 
     # Read the file and store it as bytes
     f = open(os.path.join("pastebot.net/", file_path), "rb")
@@ -52,7 +53,7 @@ def sign_file(file_path):
     # Make sure the path is valid
     if not os.path.exists('master_folder/signature_Private_key.pem'):
         print("you do not have a key-pair, enter 'generate-signKey' command to get one")
-        os._exit(1)
+        return 0
 
     # Read the key stored in the master_folder
     key = RSA.importKey(open('master_folder/signature_Private_key.pem').read())
@@ -64,5 +65,3 @@ def sign_file(file_path):
     signature = sign.sign(h)
     f_signed = file_data+"\nSignature: \n" + signature.hex()
     return f_signed
-
-
