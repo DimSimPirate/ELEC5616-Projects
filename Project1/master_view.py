@@ -73,6 +73,7 @@ if __name__ == "__main__":
 
         if cmd[0].lower() == 'help':
             print('-- help (list of all commands available)')
+            print('-- list (lists all files in pastebot.net)')
             print('-- generate-signkey (to generate the signature key)')
             print('-- generate-encykey (to generate the encryption key)')
             print('-- sign FILENAME (to sign a file in the pastebot.net)')
@@ -80,6 +81,13 @@ if __name__ == "__main__":
             print('-- cat FILENAME (observe the content of a plaintext file, caution: cannot use for encrypted file)')
             print('-- create FILENAME (create a plaintext file, contents specified by user input, and sign)')
             print('-- quit / exit (exit the program)')
+
+        elif cmd[0].lower() == 'list':
+            for fname in os.listdir('pastebot.net'):
+                #ignore the public_keys directory
+                if fname == 'public_keys':
+                    continue
+                print(fname)
 
         elif cmd[0].lower() == 'generate-signkey':
             generate_signkey()
