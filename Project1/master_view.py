@@ -80,6 +80,7 @@ if __name__ == "__main__":
             print('-- sign FILENAME (to sign a file in the pastebot.net)')
             print('-- view FILENAME (to decrypt and print it out of a file in the pastebot,net)')
             print('-- cat FILENAME (observe the content of a plaintext file, caution: cannot use for encrypted file)')
+            print('-- create FILENAME (create a plaintext file, contents specified by user input, and sign)')
             print('-- quit / exit (exit the program)')
 
         elif cmd[0].lower() == 'generate-signkey':
@@ -127,6 +128,26 @@ if __name__ == "__main__":
                     print("nah, I guess there are some hex our of 0-127 range")
             else:
                 print("The view command requires a filename afterwards")
+
+        elif cmd[0].lower() == 'create':
+            if len(cmd) == 2:
+                fn = cmd[1]
+                raw_file = open(os.path.join('pastebot.net', fn),"w+")
+                raw_txt = input("Enter the text you wish to write into the file: ")
+                raw_file.write(raw_txt)
+                raw_file.close()
+                signed_file = sign_file(fn)
+
+                if signed_file != 0:
+                    f = open(os.path.join("pastebot.net", fn+'.signed'), 'w')
+                    f.write(signed_file)
+                    f.close()
+                    print("Signed file successfully created")
+
+                os.remove(os.path.join('pastebot.net', fn))
+
+            else:
+                print("WHAT THE HELL MAN, I CANT MAKE A FILE WITHOUT A NAME")
 
         elif cmd[0].lower() == "quit" or cmd[0].lower() == "exit":
             break
