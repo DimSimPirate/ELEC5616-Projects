@@ -45,6 +45,7 @@ if __name__ == "__main__":
     # Wait for a small amount of time so that the output
     # doesn't play around with our "command prompt"
     time.sleep(0.3)
+    print("Welcome Mr Bot, enter your command below. Type help for a list of available comamnds.")
 
     while 1:
         # Naive command loop
@@ -54,10 +55,19 @@ if __name__ == "__main__":
         if not cmd:
             print("You need to enter a command...")
             continue
+
+        if cmd[0].lower() == "help":
+            print('-- p2p (communication between two peers)')
+            print('-- download FILENAME (will download the specified file from pastebot.net)')
+            print('-- upload FILENAME (will upload the valuables the bot discovered to pastebot.net)')
+            print('-- mine (will mine for bitcoins)')
+            print('-- harvest (will harvest a username and password)')
+            print('-- list (will show a list of files and valuables the bot has)')
+            print('-- quit/exit (will terminate the bot)')
         # P2P Commands
         # Echo is primarily meant for testing (the receiver will echo what it hears back)
         # Upload allows for peer-to-peer file transfer to other bots
-        if cmd[0].lower() == "p2p":
+        elif cmd[0].lower() == "p2p":
             if len(cmd) > 1:
                 if cmd[1].lower() == "echo":
                     p2p_echo()
