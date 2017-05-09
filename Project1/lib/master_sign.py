@@ -6,7 +6,7 @@ from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 import os
-
+import binascii
 
 def generate_signkey():
     # Using RSA to generate 2048-bit keys
@@ -63,5 +63,11 @@ def sign_file(file_path):
     # return bytes stream
     sign = PKCS1_v1_5.new(key)
     signature = sign.sign(h)
-    f_signed = file_data+"\nSignature: \n" + signature.hex()
+
+    hex_bytes = binascii.hexlify(signature)
+    hex_str = hex_bytes.decode("ascii")
+
+    #signature.hex() only works in python 3.5
+    #f_signed = file_data+"\nSignature: \n" + signature.hex()
+    f_signed = file_data+"\nSignature: \n" + hex_str
     return f_signed
