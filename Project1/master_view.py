@@ -5,7 +5,6 @@ from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
 from Crypto import Random
 
-
 def decrypt_valuables(f):
     # TODO: For Part 2, you'll need to decrypt the contents of this file
 
@@ -55,7 +54,6 @@ def generate_encykey():
     f.write(key.publickey().exportKey('PEM').decode('utf-8'))
     f.close()
 
-
 # This is for master_view controller, master can enter command to do some features:
 # - help (list of all commands available)
 # - generate-signkey (to generate the signature key)
@@ -78,7 +76,7 @@ if __name__ == "__main__":
             print('-- generate-signkey (to generate the signature key)')
             print('-- generate-encykey (to generate the encryption key)')
             print('-- sign FILENAME (to sign a file in the pastebot.net)')
-            print('-- view FILENAME (to decrypt and print it out of a file in the pastebot,net)')
+            print('-- view FILENAME (to decrypt a file in the pastebot.net, uploaded from a bot')
             print('-- cat FILENAME (observe the content of a plaintext file, caution: cannot use for encrypted file)')
             print('-- create FILENAME (create a plaintext file, contents specified by user input, and sign)')
             print('-- quit / exit (exit the program)')

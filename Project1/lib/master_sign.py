@@ -30,8 +30,7 @@ def generate_signkey():
 
 def sign_file(file_path):
 
-    #TODO: handle file not found exception so the program doesnt have to exit
-    # Make sure the path is exist
+    # Make sure the path exists
     if not os.path.exists(os.path.join("pastebot.net", file_path)):
         print("There is not such file or directory, try again:")
         return 0

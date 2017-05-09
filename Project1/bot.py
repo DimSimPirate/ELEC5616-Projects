@@ -1,5 +1,3 @@
-# TODO 7: make bot can encrypt the valuable file and send it to master
-
 import socket
 import time
 import threading
@@ -58,6 +56,8 @@ if __name__ == "__main__":
 
         if cmd[0].lower() == "help":
             print('-- p2p (communication between two peers)')
+            print('-- p2p echo (will prompt the used to imput text for the other bot to repeat)')
+            print('-- p2p upload FILENAME (will send specified file to the other bot)')
             print('-- download FILENAME (will download the specified file from pastebot.net)')
             print('-- upload FILENAME (will upload the valuables the bot discovered to pastebot.net)')
             print('-- mine (will mine for bitcoins)')
