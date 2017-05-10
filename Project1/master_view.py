@@ -128,16 +128,18 @@ if __name__ == "__main__":
                     print("The given file doesn't exist on pastebot.net")
                 else:
                     f = open(os.path.join("pastebot.net", fn), "rb").read()
-                try:
-                    print(str(f, 'ascii'))
-                except ValueError:
-                    print("nah, I guess there are some hex our of 0-127 range")
+                    try:
+                        print(str(f, 'ascii'))
+                    except ValueError:
+                        print("nah, I guess there are some hex our of 0-127 range")
             else:
                 print("The view command requires a filename afterwards")
 
         elif cmd[0].lower() == 'create':
             if len(cmd) == 2:
                 fn = cmd[1]
+                #NOTE: not entirely secure, raw file will be visible for a short time
+                #TODO: create a temporary file inside master_folder instead
                 raw_file = open(os.path.join('pastebot.net', fn),"w+")
                 raw_txt = input("Enter the text you wish to write into the file: ")
                 raw_file.write(raw_txt)
