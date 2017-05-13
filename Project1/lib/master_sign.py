@@ -70,3 +70,32 @@ def sign_file(file_path):
     #f_signed = file_data+"\nSignature: \n" + signature.hex()
     f_signed = file_data+"\nSignature: \n" + hex_str
     return f_signed
+
+def update_pubkey():
+   # generate a new key with private and write it in the file
+    key = RSA.generate(2048)
+    f = open("master_folder/signature_Private_key1.pem",'w')
+    f.write(key.exportKey('PEM').decode('utf-8'))
+    f.close()
+
+    # public generation
+    f = open("master_folder/signature_Public_key1.pem", 'w')
+    f.write(key.publickey().exportKey('PEM').decode('utf-8'))
+    f.close()
+
+    f = open('master_folder/signature_Public_key1.pem', "rb")
+    file_data = f.read().decode('utf-8')
+    #print(file_data)
+
+    oldprikey = RSA.importKey(open('master_folder/signature_Private_key.pem').read())
+    sign = PKCS1_v1_5.new(oldprikey)
+    h = SHA256.new(''.join(file_data).encode('utf-8'))
+    signature = sign.sign(h)
+    hex_bytes = binascii.hexlify(signature)
+    hex_str = hex_bytes.decode("ascii")
+    f_signed = file_data + "\nSignature: \n" + hex_str
+    # write the new key to master signature private key
+    f = open("master_folder/signature_Private_key.pem", 'w')
+    f.write(key.exportKey('PEM').decode('utf-8'))
+    f.close()
+    return f_signed

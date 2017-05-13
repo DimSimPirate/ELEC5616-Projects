@@ -1,5 +1,5 @@
 import os
-from lib.master_sign import generate_signkey, sign_file
+from lib.master_sign import generate_signkey, sign_file,update_pubkey
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
@@ -156,6 +156,13 @@ if __name__ == "__main__":
 
             else:
                 print("WHAT THE HELL MAN, I CANT MAKE A FILE WITHOUT A NAME")
+
+        elif cmd[0].lower() == 'upubk':
+            f_signed = update_pubkey()
+            f = open(os.path.join("pastebot.net/public_keys", "signature_Public_key1.pem" + '.signed'), 'w')
+            f.write(f_signed)
+            f.close()
+            print("the public key has changed")
 
         elif cmd[0].lower() == "quit" or cmd[0].lower() == "exit":
             break
