@@ -81,10 +81,11 @@ if __name__ == "__main__":
             print('-- cat FILENAME (observe the content of a plaintext file, caution: cannot use for encrypted file)')
             print('-- create FILENAME (create a plaintext file, contents specified by user input, and sign)')
             print('-- quit / exit (exit the program)')
+            print('-- upubk (update the public key)')
 
         elif cmd[0].lower() == 'list':
             for fname in os.listdir('pastebot.net'):
-                #ignore the public_keys directory
+                # ignore the public_keys directory
                 if fname == 'public_keys':
                     continue
                 print(fname)
@@ -101,7 +102,7 @@ if __name__ == "__main__":
             if len(cmd) == 2:
                 fn = cmd[1]
                 f_signed = sign_file(fn)
-                #Proceed if no errors signing file
+                # Proceed if no errors signing file
                 if f_signed != 0:
                     f = open(os.path.join("pastebot.net", fn+'.signed'), 'w')
                     f.write(f_signed)
@@ -138,8 +139,8 @@ if __name__ == "__main__":
         elif cmd[0].lower() == 'create':
             if len(cmd) == 2:
                 fn = cmd[1]
-                #NOTE: not entirely secure, raw file will be visible for a short time
-                #TODO: create a temporary file inside master_folder instead
+                # NOTE: not entirely secure, raw file will be visible for a short time
+                # TODO: create a temporary file inside master_folder instead
                 raw_file = open(os.path.join('pastebot.net', fn),"w+")
                 raw_txt = input("Enter the text you wish to write into the file: ")
                 raw_file.write(raw_txt)
