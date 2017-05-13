@@ -45,6 +45,7 @@ if __name__ == "__main__":
     # doesn't play around with our "command prompt"
     time.sleep(0.3)
     print("Welcome Mr Bot, enter your command below. Type help for a list of available comamnds.")
+
     publickey()
     while 1:
         # Naive command loop
