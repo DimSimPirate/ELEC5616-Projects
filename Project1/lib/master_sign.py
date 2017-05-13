@@ -24,7 +24,7 @@ def generate_signkey():
     f.close()
 
     # Upload the public key to pastebot.net/public_keys
-    f = open("pastebot.net/public_keys/signature_Public_key.pem",'w')
+    f = open("bot_localfiles/signature_Public_key.pem",'w')
     f.write(key.publickey().exportKey('PEM').decode('utf-8'))
     f.close()
 

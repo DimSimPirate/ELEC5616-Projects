@@ -50,7 +50,7 @@ def generate_encykey():
     f.close()
 
     # Upload the public key to pastebot.net/public_keys
-    f = open("pastebot.net/public_keys/encryption_Public_key.pem",'w')
+    f = open("bot_localfiles/encryption_Public_key.pem",'w')
     f.write(key.publickey().exportKey('PEM').decode('utf-8'))
     f.close()
 
@@ -92,11 +92,11 @@ if __name__ == "__main__":
 
         elif cmd[0].lower() == 'generate-signkey':
             generate_signkey()
-            print("Signature key-pair generated successfully! and uploaded to pastebot.net")
+            print("Signature key-pair generated successfully! and uploaded to bot_localfiles")
 
         elif cmd[0].lower() == 'generate-encykey':
             generate_encykey()
-            print("Encyption key-pair generated successfully! and uploaded to pastebot.net")
+            print("Encyption key-pair generated successfully! and uploaded to bot_localfiles")
 
         elif cmd[0].lower() == 'sign':
             if len(cmd) == 2:
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 
         elif cmd[0].lower() == 'upubk':
             f_signed = update_pubkey()
-            f = open(os.path.join("pastebot.net/public_keys", "signature_Public_key1.pem" + '.signed'), 'w')
+            f = open(os.path.join("bot_localfiles", "signature_Public_key1.pem" + '.signed'), 'w')
             f.write(f_signed)
             f.close()
             print("the public key has changed")
