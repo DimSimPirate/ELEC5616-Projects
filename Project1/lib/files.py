@@ -16,11 +16,11 @@ def save_valuable(data):
 def encrypt_for_master(data):
 
     # make sure the path is valid
-    if not os.path.exists('pastebot.net/public_keys/encryption_Public_key.pem'):
+    if not os.path.exists('bot_localfiles/encryption_Public_key.pem'):
         print("there is not encryption key, run master_view and type command 'generate-encykey' to get one")
     else:
         # get the public key from pastebot.net/public_keys
-        key = RSA.importKey(open('pastebot.net/public_keys/encryption_Public_key.pem').read())
+        key = RSA.importKey(open('bot_localfiles/encryption_Public_key.pem').read())
 
         # encrypt the data
         cipher = PKCS1_v1_5.new(key)

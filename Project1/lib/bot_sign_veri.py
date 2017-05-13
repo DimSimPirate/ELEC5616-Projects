@@ -12,12 +12,12 @@ def bot_verification(fn):
     h1 = SHA256.new(''.join(lines[:-2]).encode('utf-8'))
 
     # Make sure the path is valid
-    if not os.path.exists('pastebot.net/public_keys/signature_Public_key.pem'):
+    if not os.path.exists('bot_localfiles/signature_Public_key.pem'):
         print("There is not public key installed in public_keys folder, run master_bot and type command"
               " 'generate-signkey' to upload a new one")
     else:
         # Extract public keys from pastebot.net/public_keys
-        publicKey = RSA.importKey(open('pastebot.net/public_keys/signature_Public_key.pem').read())
+        publicKey = RSA.importKey(open('bot_localfiles/signature_Public_key.pem').read())
 
         # Verifying the data
         verifier = PKCS1_v1_5.new(publicKey)

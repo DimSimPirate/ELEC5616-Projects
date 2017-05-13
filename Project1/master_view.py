@@ -1,5 +1,5 @@
 import os
-from lib.master_sign import generate_signkey, sign_file
+from lib.master_sign import generate_signkey, sign_file,update_pubkey
 from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
@@ -50,7 +50,7 @@ def generate_encykey():
     f.close()
 
     # Upload the public key to pastebot.net/public_keys
-    f = open("pastebot.net/public_keys/encryption_Public_key.pem",'w')
+    f = open("bot_localfiles/encryption_Public_key.pem",'w')
     f.write(key.publickey().exportKey('PEM').decode('utf-8'))
     f.close()
 
@@ -81,27 +81,28 @@ if __name__ == "__main__":
             print('-- cat FILENAME (observe the content of a plaintext file, caution: cannot use for encrypted file)')
             print('-- create FILENAME (create a plaintext file, contents specified by user input, and sign)')
             print('-- quit / exit (exit the program)')
+            print('-- upubk (update the public key)')
 
         elif cmd[0].lower() == 'list':
             for fname in os.listdir('pastebot.net'):
-                #ignore the public_keys directory
+                # ignore the public_keys directory
                 if fname == 'public_keys':
                     continue
                 print(fname)
 
         elif cmd[0].lower() == 'generate-signkey':
             generate_signkey()
-            print("Signature key-pair generated successfully! and uploaded to pastebot.net")
+            print("Signature key-pair generated successfully! and uploaded to bot_localfiles")
 
         elif cmd[0].lower() == 'generate-encykey':
             generate_encykey()
-            print("Encyption key-pair generated successfully! and uploaded to pastebot.net")
+            print("Encyption key-pair generated successfully! and uploaded to bot_localfiles")
 
         elif cmd[0].lower() == 'sign':
             if len(cmd) == 2:
                 fn = cmd[1]
                 f_signed = sign_file(fn)
-                #Proceed if no errors signing file
+                # Proceed if no errors signing file
                 if f_signed != 0:
                     f = open(os.path.join("pastebot.net", fn+'.signed'), 'w')
                     f.write(f_signed)
@@ -138,8 +139,8 @@ if __name__ == "__main__":
         elif cmd[0].lower() == 'create':
             if len(cmd) == 2:
                 fn = cmd[1]
-                #NOTE: not entirely secure, raw file will be visible for a short time
-                #TODO: create a temporary file inside master_folder instead
+                # NOTE: not entirely secure, raw file will be visible for a short time
+                # TODO: create a temporary file inside master_folder instead
                 raw_file = open(os.path.join('pastebot.net', fn),"w+")
                 raw_txt = input("Enter the text you wish to write into the file: ")
                 raw_file.write(raw_txt)
@@ -156,6 +157,13 @@ if __name__ == "__main__":
 
             else:
                 print("WHAT THE HELL MAN, I CANT MAKE A FILE WITHOUT A NAME")
+
+        elif cmd[0].lower() == 'upubk':
+            f_signed = update_pubkey()
+            f = open(os.path.join("bot_localfiles", "signature_Public_key1.pem" + '.signed'), 'w')
+            f.write(f_signed)
+            f.close()
+            print("the public key has changed")
 
         elif cmd[0].lower() == "quit" or cmd[0].lower() == "exit":
             break
