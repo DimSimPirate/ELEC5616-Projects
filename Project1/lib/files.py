@@ -1,5 +1,5 @@
 import os
-from lib.bot_sign_veri import bot_verification
+from lib.bot_sign_verif import bot_verification
 from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_v1_5
